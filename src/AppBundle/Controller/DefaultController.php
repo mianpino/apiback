@@ -43,25 +43,40 @@ class DefaultController extends Controller
 			
 			if(count($validate_email) == 0 && $password != null){
 				
-				if($getHash == null || $getHash == "false"){
+				/*if($getHash == null || $getHash == "false"){
 					$signup = $jwt_auth->signup($email, $pwd);
 				}else{
 					$signup = $jwt_auth->signup($email, $pwd, true);
-				}
+				}*/
+				$signup = $jwt_auth->signup($email, $pwd);
+			    $token = $jwt_auth->signup($email, $pwd, true);
 
-				return new JsonResponse($signup);
+				if (!$signup && !$token) {
+					$response = new JsonResponse();
+					$response->setStatusCode(401,'Credentiales no validas');
+
+					//return new JsonResponse('Credentiales no validas',401);
+					return $response;	
+				}
+				else{
+					$data = array('user'=>$signup,'token'=> $token);
+					return new JsonResponse($data);
+				}
+				
 			}else{
-				return $helpers->json(array(
+				return new JsonResponse('Datos invalidos',401);
+				/*return $helpers->json(array(
 					"status" => "error", 
 					"data" => "Login not valid!!"
-					));
+					));*/
 			}
 			
 		}else{
-			return $helpers->json(array(
+			/*return $helpers->json(array(
 					"status" => "error", 
 					"data" => "Send json with post !!"
-					));
+					));*/
+			return new JsonResponse('Datos incompletos',400);		
 		}
 	}
 	

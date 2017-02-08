@@ -52,11 +52,13 @@ class JwtAuth {
 			if($getHash != null){
 				return $jwt;
 			}else{
+				//$decoded['token'] = $jwt; 
 				return $decoded;
 			}
 			
 		}else{
-			return array("status" => "error", "data" => "Login failed !!");
+			//return array("status" => "error", "data" => "Login failed !!");
+			return false;
 		}
 	}
 	
